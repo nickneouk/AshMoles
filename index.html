@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Greek Ash Moles Fun! - Kids Greek Learning (Easy Only, No Audio)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg: #f6fbff;
+      --card: #ffffff;
+      --ink: #143148;
+      --muted: #5a6e7d;
+      --primary: #2a90ff;
+      --primary-ink: #0b63bd;
+      --accent: #ffb02e;
+      --win: #30c48d;
+      --lose: #ff6b6b;
+      --shadow: 0 6px 18px rgba(0,0,0,.06);
+      --radius: 14px;
+    }
+    *{ box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--ink);
+      background: linear-gradient(180deg, #eef7ff 0%, #f9fcff 100%);
+    }
+    .app{
+      max-width: 980px;
+      margin: 0 auto;
+      min-height: 100svh;
+      display:flex;
+      flex-direction:column;
+    }
+    header.topbar{
+      position: sticky;
+      top:0;
+      z-index:50;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      padding: 10px 12px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .title{
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing:.3px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .title .logo{
+      font-size: 22px;
+    }
+    .stars-view{
+      min-width: 84px;
+      text-align:right;
+      font-weight: 800;
+    }
+    .stars-view .count{
+      color: #ffb800;
+      font-size: 18px;
+      margin-left:4px;
+    }
+    nav.tabbar{
+      position: sticky;
+      bottom:0;
+      z-index:40;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      display:grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap:2px;
+    }
+    nav.tabbar button{
+      appearance:none;
+      border:0;
+      background:transparent;
+      padding:8px 4px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:2px;
+      font-weight:700;
+      color: var(--muted);
+      cursor:pointer;
+    }
+    nav.tabbar button.active{
+      color: var(--primary-ink);
+    }
+    nav.tabbar .ico{ font-size:20px; }
+    main{
+      padding: 16px;
+      flex:1;
+      display:block;
+    }
+    section.route{ display:none; }
+    section.route.active{ display:block; }
+
+    .hero{
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      display:flex;
+      gap:18px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .hero h1{ font-size: 22px; margin:0 0 6px 0; }
+    .hero p{ margin:0; color: var(--muted); }
+    .grid{ display:grid; gap:12px; }
+    @media (min-width: 700px){
+      .grid.cols-3{ grid-template-columns: repeat(3,1fr); }
+    }
+    .card{
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+    .btn{
+      appearance:none; border:0; cursor:pointer;
+      background: var(--primary);
+      color:white; font-weight:800;
+      padding:10px 14px; border-radius:12px;
+      box-shadow: 0 4px 14px rgba(42,144,255,0.35);
+    }
+    .btn.secondary{
+      background:#eef6ff; color: var(--primary-ink); box-shadow:none; font-weight:800;
+    }
+    .btn.small{ padding:6px 10px; border-radius:10px; font-weight:800; }
+    .toolbar{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .muted{ color: var(--muted); }
+    .spacer{ flex:1; }
+    .hint{ font-size: 13px; color: var(--muted); }
+
+    .seg{
+      background:#eef6ff; padding:4px; border-radius: 999px;
+      display:inline-flex; gap:4px;
+    }
+    .seg button{
+      border:0; background: transparent; padding:8px 12px;
+      border-radius: 999px; color: var(--primary-ink); font-weight:700; cursor:pointer;
+    }
+    .seg button.active{ background: var(--primary); color: white; box-shadow: 0 2px 8px rgba(42,144,255,0.35); }
+
+    /* Alphabet */
+    .letters{
+      display:grid; gap:10px;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    .letter-card{
+      border-radius: 16px; padding: 12px; background: #ffffff;
+      box-shadow: var(--shadow);
+      display:flex; flex-direction:column; gap:8px;
+    }
+    .glyph{ display:flex; align-items:center; gap:10px; font-weight:800; }
+    .glyph .big{ font-size: 28px; }
+    .name{ font-weight:800; color: var(--primary-ink); }
+    .example{ display:flex; align-items:center; gap:8px; }
+    .example .emoji{ font-size: 22px; }
+
+    /* Memory */
+    .memory-board{
+      display:grid; gap:10px;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .memory-card{
+      background:#f7fbff; border-radius: 14px; padding:20px; aspect-ratio: 1/1;
+      display:flex; align-items:center; justify-content:center;
+      font-size: 30px; font-weight:900; color: #29638c; cursor:pointer; user-select:none;
+      box-shadow: var(--shadow); transition: transform .08s ease;
+    }
+    .memory-card.flipped, .memory-card.matched{ background:#ffffff; color:#0f3650; transform: scale(0.98); }
+    .memory-card.matched{ outline: 3px solid #b6f2dc; }
+
+    /* Word Builder */
+    .builder{ display:flex; flex-direction:column; gap:12px; }
+    .letter-bank, .word-output{
+      display:flex; flex-wrap:wrap; gap:8px; background:#f1f6fb; border-radius: 12px; padding:10px; min-height: 48px;
+    }
+    .tile{
+      background:white; border-radius: 12px; padding: 8px 10px; box-shadow: var(--shadow);
+      font-weight:800; cursor:pointer;
+    }
+    .output-char{ background:#ffffff; border-radius: 12px; padding: 8px 10px; box-shadow: var(--shadow); font-weight:800; }
+    .success{ color: var(--win); font-weight:800; }
+    .fail{ color: var(--lose); font-weight:800; }
+
+    /* Reading */
+    .question{ font-size: 20px; font-weight:800; }
+    .choices{ display:grid; gap:10px; grid-template-columns: repeat(3, 1fr); }
+    .choice{
+      background:#ffffff; border-radius: 12px; padding: 14px; font-size:28px;
+      display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow: var(--shadow);
+    }
+    .choice.correct{ outline: 3px solid #b6f2dc; }
+    .choice.wrong{ outline: 3px solid #ffd3d3; }
+
+    /* Award + toast */
+    .toast{
+      position: fixed; bottom: 78px; left:50%; transform: translateX(-50%);
+      background:#143148; color:white; padding:10px 14px; border-radius: 12px;
+      font-weight:800; opacity:0; pointer-events:none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index:999;
+    }
+    .toast.show{ opacity:1; transform: translateX(-50%) translateY(-6px); }
+    .award{
+      position: fixed; inset:0; display:none; align-items:center; justify-content:center;
+      background: rgba(20,49,72,0.12); z-index: 900;
+    }
+    .award.show{ display:flex; }
+    .award .box{
+      background:white; border-radius: 16px; padding: 20px; box-shadow: var(--shadow); text-align:center;
+    }
+    .award .big{ font-size: 38px; }
+    .award .area{ position: absolute; inset:0; }
+
+    /* helpers */
+    .row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .mb8{ margin-bottom:8px; } .mb12{ margin-bottom:12px; } .mb16{ margin-bottom:16px; }
+    @media (min-width: 800px){ nav.tabbar{ position: sticky; bottom: initial; top: 0; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="title">
+        <span class="logo">🇬🇷</span>
+      ASH MOLES  Greek Fun!
+      </div>
+      <div class="stars-view" aria-live="polite">
+        ⭐ <span class="count" id="starCount">0</span>
+      </div>
+    </header>
+
+    <main>
+      <section id="route-home" class="route active">
+        <div class="hero">
+          <div>
+            <h1>Γεια σας! Welcome! 🎉</h1>
+            <p>Embark on an exciting journey to master the Greek alphabet, challenge yourself with engaging games, practice reading comprehension, and construct meaningful sentences. Choose any activity below to begin your adventure!</p>
+          </div>
+          <div class="toolbar">
+            <button class="btn" data-nav="alphabet">Explore Alphabet 🔤</button>
+            <button class="btn secondary" data-nav="games">Challenge Games 🎮</button>
+          </div>
+        </div>
+
+        <div class="grid cols-3 mb16" style="margin-top:16px;">
+          <div class="card">
+            <h3>Greek Alphabet 🔡</h3>
+            <p class="muted">Discover each letter's unique character, pronunciation guide, phonetic sounds, and authentic example vocabulary.</p>
+            <div class="toolbar"><button class="btn small" data-nav="alphabet">Explore</button></div>
+          </div>
+          <div class="card">
+            <h3>Reading Adventures 📖</h3>
+            <p class="muted">Comprehend Greek sentences and select the corresponding visual representation from multiple choices.</p>
+            <div class="toolbar"><button class="btn small" data-nav="reading">Begin</button></div>
+          </div>
+          <div class="card">
+            <h3>Sentence Architecture ✍️</h3>
+            <p class="muted">Arrange words strategically in the correct sequence to construct grammatically accurate Greek sentences.</p>
+            <div class="toolbar"><button class="btn small" data-nav="sentences">Create</button></div>
+          </div>
+          <div class="card">
+            <h3>Memory Challenge 🧠</h3>
+            <p class="muted">Test your cognitive abilities by pairing uppercase letters with their lowercase counterparts.</p>
+            <div class="toolbar"><button class="btn small" data-nav="games" data-sub="memory">Challenge</button></div>
+          </div>
+          <div class="card">
+            <h3>Word Construction 🧩</h3>
+            <p class="muted">Reconstruct scrambled letters to reveal authentic Greek vocabulary with helpful context clues.</p>
+            <div class="toolbar"><button class="btn small" data-nav="games" data-sub="builder">Build</button></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="route-alphabet" class="route">
+        <div class="row mb12"><h2 class="mb8">Greek Alphabet Mastery 🔤</h2></div>
+        <div class="letters" id="lettersGrid"></div>
+      </section>
+
+      <section id="route-games" class="route">
+        <div class="row mb12">
+          <div class="seg" id="gameSeg">
+            <button data-game="memory" class="active">Memory</button>
+            <button data-game="builder">Builder</button>
+            <button data-game="translate">Translate</button>
+            <button data-game="picture">Picture</button>
+            <button data-game="reverse">Reverse</button>
+          </div>
+          <div class="spacer"></div>
+          <button class="btn small secondary" id="newGameBtn">Fresh Start</button>
+        </div>
+
+        <div id="gameMemory" class="card">
+          <div class="row mb8">
+            <strong>Memory Challenge: Match Uppercase ↔ Lowercase</strong>
+            <div class="spacer"></div>
+            <span class="muted">Attempts: <b id="memMoves">0</b></span>
+          </div>
+          <div class="memory-board" id="memoryBoard"></div>
+        </div>
+
+        <div id="gameBuilder" class="card" style="display:none;">
+          <div class="builder">
+            <div class="row">
+              <strong>Word Construction Challenge</strong>
+              <div class="spacer"></div>
+              <button class="btn small secondary" id="builderNewBtn">Next Challenge</button>
+            </div>
+            <div class="muted" id="builderHint">Clue:</div>
+            <div class="word-output" id="builderOutput" aria-live="polite"></div>
+            <div class="letter-bank" id="builderBank"></div>
+            <div class="toolbar">
+              <button class="btn small secondary" id="builderUndo">Backtrack</button>
+              <button class="btn small secondary" id="builderShuffle">Reorganize</button>
+              <button class="btn small" id="builderReveal">Solution</button>
+              <div class="spacer"></div>
+              <span id="builderStatus" class="hint"></span>
+            </div>
+          </div>
+        </div>
+
+        <div id="gameTranslate" class="card" style="display:none;">
+          <div class="row mb8">
+            <strong>Translation Challenge: Greek → English</strong>
+            <div class="spacer"></div>
+            <span class="muted">Score: <b id="translateScore">0</b>/<b id="translateTotal">5</b></span>
+          </div>
+          <div class="mb12 question" id="translateQuestion">γάτα</div>
+          <div class="choices mb12" id="translateChoices"></div>
+          <div class="row">
+            <button class="btn" id="translateNext">Next Word</button>
+            <div class="spacer"></div>
+            <span id="translateStatus" class="hint"></span>
+          </div>
+        </div>
+
+        <div id="gamePicture" class="card" style="display:none;">
+          <div class="row mb8">
+            <strong>Picture Match: Greek Word → Picture</strong>
+            <div class="spacer"></div>
+            <span class="muted">Score: <b id="pictureScore">0</b>/<b id="pictureTotal">5</b></span>
+          </div>
+          <div class="mb12 question" id="pictureQuestion">γάτα</div>
+          <div class="choices mb12" id="pictureChoices"></div>
+          <div class="row">
+            <button class="btn" id="pictureNext">Next Word</button>
+            <div class="spacer"></div>
+            <span id="pictureStatus" class="hint"></span>
+          </div>
+        </div>
+
+        <div id="gameReverse" class="card" style="display:none;">
+          <div class="row mb8">
+            <strong>Reverse Translation: English → Greek</strong>
+            <div class="spacer"></div>
+            <span class="muted">Score: <b id="reverseScore">0</b>/<b id="reverseTotal">5</b></span>
+          </div>
+          <div class="mb12 question" id="reverseQuestion">cat</div>
+          <div class="choices mb12" id="reverseChoices"></div>
+          <div class="row">
+            <button class="btn" id="reverseNext">Next Word</button>
+            <div class="spacer"></div>
+            <span id="reverseStatus" class="hint"></span>
+          </div>
+        </div>
+      </section>
+
+      <section id="route-reading" class="route">
+        <div class="card">
+          <div class="row mb8">
+            <strong>Reading Comprehension Challenge</strong>
+            <div class="spacer"></div>
+            <span class="muted">Question <b id="readIdx">1</b>/<b id="readTotal">8</b> • Achievement: <b id="readScore">0</b></span>
+          </div>
+          <div class="mb12 question" id="readSentence">...</div>
+          <div class="choices mb12" id="readChoices"></div>
+          <div class="row">
+            <button class="btn" id="readNext">Continue</button>
+            <button class="btn secondary" id="readShow">Reveal Translation</button>
+            <div class="spacer"></div>
+            <span id="readExplain" class="hint"></span>
+          </div>
+        </div>
+      </section>
+
+      <section id="route-sentences" class="route">
+        <div class="card">
+          <div class="row mb8">
+            <strong>Sentence Construction Workshop</strong>
+            <div class="spacer"></div>
+            <span class="muted">Exercise <b id="sentIdx">1</b>/<b id="sentTotal">6</b></span>
+          </div>
+          <div class="sentence-area">
+            <div class="sentence-output" id="sentOutput"></div>
+            <div class="word-bank" id="sentBank"></div>
+            <div class="toolbar">
+              <button class="btn" id="sentCheck">Check</button>
+              <button class="btn secondary" id="sentUndo">Back</button>
+              <button class="btn secondary" id="sentSkip">Next</button>
+              <div class="spacer"></div>
+              <span id="sentStatus" class="hint"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="tabbar" id="nav">
+      <button class="active" data-route="home"><div class="ico">🏠</div><div>Home</div></button>
+      <button data-route="alphabet"><div class="ico">🔤</div><div>Alphabet</div></button>
+      <button data-route="games"><div class="ico">🎮</div><div>Games</div></button>
+      <button data-route="reading"><div class="ico">📖</div><div>Reading</div></button>
+      <button data-route="sentences"><div class="ico">✍️</div><div>Sentences</div></button>
+    </nav>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div class="award" id="award" aria-hidden="true">
+    <!-- click catcher to close -->
+    <div class="area" id="awardBg"></div>
+    <div class="box" role="dialog" aria-modal="true">
+      <div class="big" id="awardEmoji">⭐️⭐️</div>
+      <div style="font-weight:800; margin-top:6px;" id="awardText">You earned stars!</div>
+      <div class="row" style="justify-content:center; margin-top:10px;">
+        <button class="btn small" id="awardClose">Fantastic!</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    ;(()=>{
+      // ---------- Data ----------
+      const LETTERS = [
+        { upper:'Α', lower:'α', name:'άλφα', sound:'a as in "father"', word:'αβγό', translit:'avgó', meaning:'egg', emoji:'🥚' },
+        { upper:'Β', lower:'β', name:'βήτα', sound:'v as in "violin"', word:'βιβλίο', translit:'vivlío', meaning:'book', emoji:'📖' },
+        { upper:'Γ', lower:'γ', name:'γάμμα', sound:'g (go), y before e/i)', word:'γάτα', translit:'gáta', meaning:'cat', emoji:'🐱' },
+        { upper:'Δ', lower:'δ', name:'δέλτα', sound:'th as in "this"', word:'δέντρο', translit:'déntro', meaning:'tree', emoji:'🌳' },
+        { upper:'Ε', lower:'ε', name:'έψιλον', sound:'e as in "get"', word:'ελέφαντας', translit:'eléfantas', meaning:'elephant', emoji:'🐘' },
+        { upper:'Ζ', lower:'ζ', name:'ζήτα', sound:'z as in "zoo"', word:'ζάρι', translit:'zári', meaning:'dice', emoji:'🎲' },
+        { upper:'Η', lower:'η', name:'ήτα', sound:'ee as in "see"', word:'ήλιος', translit:'ílios', meaning:'sun', emoji:'☀️' },
+        { upper:'Θ', lower:'θ', name:'θήτα', sound:'th as in "think"', word:'θάλασσα', translit:'thálassa', meaning:'sea', emoji:'🌊' },
+        { upper:'Ι', lower:'ι', name:'ιώτα', sound:'ee (short)', word:'ιπποπόταμος', translit:'ippopótamos', meaning:'hippo', emoji:'🦛' },
+        { upper:'Κ', lower:'κ', name:'κάππα', sound:'k', word:'καράβι', translit:'karávi', meaning:'ship', emoji:'🚢' },
+        { upper:'Λ', lower:'λ', name:'λάμδα', sound:'l', word:'λεμόνι', translit:'lemóni', meaning:'lemon', emoji:'🍋' },
+        { upper:'Μ', lower:'μ', name:'μι', sound:'m', word:'μήλο', translit:'mílo', meaning:'apple', emoji:'🍎' },
+        { upper:'Ν', lower:'ν', name:'νι', sound:'n', word:'νερό', translit:'neró', meaning:'water', emoji:'💧' },
+        { upper:'Ξ', lower:'ξ', name:'ξι', sound:'ks', word:'ξύλο', translit:'xýlo', meaning:'wood', emoji:'🪵' },
+        { upper:'Ο', lower:'ο', name:'όμικρον', sound:'o', word:'ομπρέλα', translit:'ombréla', meaning:'umbrella', emoji:'☂️' },
+        { upper:'Π', lower:'π', name:'πι', sound:'p', word:'πίτα', translit:'píta', meaning:'pie', emoji:'🥧' },
+        { upper:'Ρ', lower:'ρ', name:'ρω', sound:'r', word:'ρολόι', translit:'rolói', meaning:'clock', emoji:'⏰' },
+        { upper:'Σ', lower:'σ/ς', name:'σίγμα', sound:'s', word:'σκύλος', translit:'skýlos', meaning:'dog', emoji:'🐶' },
+        { upper:'Τ', lower:'τ', name:'ταυ', sound:'t', word:'τρένο', translit:'tréno', meaning:'train', emoji:'🚆' },
+        { upper:'Υ', lower:'υ', name:'ύψιλον', sound:'i', word:'ύπνος', translit:'ýpnos', meaning:'sleep', emoji:'😴' },
+        { upper:'Φ', lower:'φ', name:'φι', sound:'f', word:'φίλος', translit:'fílos', meaning:'friend', emoji:'🧑‍🤝‍🧑' },
+        { upper:'Χ', lower:'χ', name:'χι', sound:'kh', word:'χέρι', translit:'chéri', meaning:'hand', emoji:'✋' },
+        { upper:'Ψ', lower:'ψ', name:'ψι', sound:'ps', word:'ψάρι', translit:'psári', meaning:'fish', emoji:'🐟' },
+        { upper:'Ω', lower:'ω', name:'ωμέγα', sound:'o (long)', word:'ώρα', translit:'óra', meaning:'hour', emoji:'⏳' },
+      ];
+
+      const WORDS = {
+        easy: [
+          { word:'γάτα', translit:'gáta', meaning:'cat', emoji:'🐱' },
+          { word:'μήλο', translit:'mílo', meaning:'apple', emoji:'🍎' },
+          { word:'νερό', translit:'neró', meaning:'water', emoji:'💧' },
+          { word:'βιβλίο', translit:'vivlío', meaning:'book', emoji:'📖' },
+          { word:'σκύλος', translit:'skýlos', meaning:'dog', emoji:'🐶' },
+          { word:'αστέρι', translit:'astéri', meaning:'star', emoji:'⭐' },
+          { word:'λουλούδι', translit:'louloúdi', meaning:'flower', emoji:'🌸' },
+          { word:'παιδί', translit:'paidí', meaning:'child', emoji:'🧒' },
+          { word:'σπίτι', translit:'spíti', meaning:'house', emoji:'🏠' },
+          { word:'φεγγάρι', translit:'fengári', meaning:'moon', emoji:'🌙' },
+          { word:'ψωμί', translit:'psomí', meaning:'bread', emoji:'🍞' },
+          { word:'καρδιά', translit:'kardiá', meaning:'heart', emoji:'❤️' },
+          { word:'δάσος', translit:'dásos', meaning:'forest', emoji:'🌲' },
+          { word:'πουλί', translit:'poulí', meaning:'bird', emoji:'🐦' },
+          { word:'χρώμα', translit:'chróma', meaning:'color', emoji:'🎨' },
+          { word:'μουσική', translit:'mousikí', meaning:'music', emoji:'🎵' },
+          { word:'φίλος', translit:'fílos', meaning:'friend', emoji:'👫' },
+          { word:'ελπίδα', translit:'elpída', meaning:'hope', emoji:'🕊️' },
+          { word:'ταξίδι', translit:'taxídi', meaning:'journey', emoji:'🚢' },
+          { word:'χαμόγελο', translit:'chamógelo', meaning:'smile', emoji:'😊' },
+          { word:'ουρανός', translit:'ouranós', meaning:'sky', emoji:'☁️' },
+          { word:'θάλασσα', translit:'thálassa', meaning:'sea', emoji:'🌊' },
+          { word:'ήλιος', translit:'ílios', meaning:'sun', emoji:'☀️' },
+          { word:'βουνό', translit:'vounó', meaning:'mountain', emoji:'⛰️' },
+          { word:'δρόμος', translit:'drómos', meaning:'road', emoji:'🛣️' },
+          { word:'κλειδί', translit:'kleidí', meaning:'key', emoji:'🔑' },
+          { word:'πόρτα', translit:'pórta', meaning:'door', emoji:'🚪' },
+          { word:'παράθυρο', translit:'paráthyro', meaning:'window', emoji:'🪟' },
+          { word:'τραπέζι', translit:'trapézi', meaning:'table', emoji:'🪑' },
+          { word:'κρεβάτι', translit:'kreváti', meaning:'bed', emoji:'🛏️' },
+          { word:'κήπος', translit:'kípos', meaning:'garden', emoji:'🌻' },
+          { word:'δέντρο', translit:'déntro', meaning:'tree', emoji:'🌳' },
+          { word:'γέφυρα', translit:'géfyra', meaning:'bridge', emoji:'🌉' },
+          { word:'αυτοκίνητο', translit:'aftokínito', meaning:'car', emoji:'🚗' },
+          { word:'ποδήλατο', translit:'podílato', meaning:'bicycle', emoji:'🚲' },
+          { word:'λεωφορείο', translit:'leoforeío', meaning:'bus', emoji:'🚌' },
+          { word:'αεροπλάνο', translit:'aeropláno', meaning:'airplane', emoji:'✈️' },
+          { word:'πλοίο', translit:'ploío', meaning:'ship', emoji:'🚢' },
+          { word:'γάλα', translit:'gála', meaning:'milk', emoji:'🥛' },
+          { word:'κρέας', translit:'kréas', meaning:'meat', emoji:'🥩' },
+          { word:'ψάρι', translit:'psári', meaning:'fish', emoji:'🐟' },
+          { word:'τυρί', translit:'tyrí', meaning:'cheese', emoji:'🧀' },
+          { word:'αυγό', translit:'avgó', meaning:'egg', emoji:'🥚' },
+          { word:'μέλι', translit:'méli', meaning:'honey', emoji:'🍯' },
+          { word:'ρίζα', translit:'ríza', meaning:'rice', emoji:'🍚' },
+          { word:'ζάχαρη', translit:'záchari', meaning:'sugar', emoji:'🧊' },
+          { word:'κάφε', translit:'káfe', meaning:'coffee', emoji:'☕' },
+          { word:'τσάι', translit:'tsái', meaning:'tea', emoji:'🍵' },
+          { word:'κλαδί', translit:'kladí', meaning:'branch', emoji:'🌿' },
+          { word:'φύλλο', translit:'fýllo', meaning:'leaf', emoji:'🍃' },
+          { word:'ρόδα', translit:'róda', meaning:'wheel', emoji:'⚙️' },
+          { word:'μαχαίρι', translit:'machaíri', meaning:'knife', emoji:'🔪' },
+          { word:'κουτάλι', translit:'koutáli', meaning:'spoon', emoji:'🥄' },
+          { word:'πιάτο', translit:'piáto', meaning:'plate', emoji:'🍽️' },
+          { word:'ποτήρι', translit:'potíri', meaning:'glass', emoji:'🥤' },
+          { word:'μπάλα', translit:'bála', meaning:'ball', emoji:'⚽' },
+          { word:'παιχνίδι', translit:'paichnído', meaning:'toy', emoji:'🧸' },
+          { word:'κούκλα', translit:'koúkla', meaning:'doll', emoji:'🪆' },
+          { word:'γλώσσα', translit:'glóssa', meaning:'language', emoji:'🗣️' },
+          { word:'μάθημα', translit:'máthima', meaning:'lesson', emoji:'📚' },
+          { word:'σχολείο', translit:'scholeío', meaning:'school', emoji:'🏫' },
+          { word:'δάσκαλος', translit:'dáskalos', meaning:'teacher', emoji:'👨‍🏫' },
+        ]
+      };
+
+      const READING = {
+        easy: [
+          { sentence:'Το μήλο είναι κόκκινο.', translation:'The apple is red.', options:['🍐','🍎','🍌'], answer:'🍎' },
+          { sentence:'Ο σκύλος τρέχει γρήγορα.', translation:'The dog runs fast.', options:['🐱','🐶','🐠'], answer:'🐶' },
+          { sentence:'Πίνω δροσερό νερό.', translation:'I drink cool water.', options:['🍞','💧','🧃'], answer:'💧' },
+          { sentence:'Η μαμά διαβάζει ιστορίες.', translation:'Mom reads stories.', options:['📖','🎵','🎨'], answer:'📖' },
+          { sentence:'Το τρένο έρχεται αργά.', translation:'The train is coming slowly.', options:['🚲','🚆','🚗'], answer:'🚆' },
+          { sentence:'Το αστέρι λάμπει φωτεινά.', translation:'The star shines brightly.', options:['⭐','🌙','☀️'], answer:'⭐' },
+          { sentence:'Το λουλούδι μυρίζει όμορφα.', translation:'The flower smells beautiful.', options:['🌸','🌿','🍀'], answer:'🌸' },
+          { sentence:'Το παιδί παίζει χαρούμενα.', translation:'The child plays happily.', options:['🧒','👴','👶'], answer:'🧒' },
+          { sentence:'Το σπίτι είναι μεγάλο.', translation:'The house is big.', options:['🏠','🏢','⛪'], answer:'🏠' },
+          { sentence:'Το φεγγάρι φαίνεται απόψε.', translation:'The moon appears tonight.', options:['🌙','⭐','☀️'], answer:'🌙' },
+          { sentence:'Το ψωμί είναι ζεστό.', translation:'The bread is warm.', options:['🍞','🥖','🧀'], answer:'🍞' },
+          { sentence:'Η καρδιά χτυπάει δυνατά.', translation:'The heart beats strongly.', options:['❤️','🫁','🧠'], answer:'❤️' },
+          { sentence:'Το δάσος είναι πράσινο.', translation:'The forest is green.', options:['🌲','🌳','🌴'], answer:'🌲' },
+          { sentence:'Το πουλί κελαηδάει μελωδικά.', translation:'The bird sings melodically.', options:['🐦','🦅','🐧'], answer:'🐦' },
+          { sentence:'Το χρώμα είναι υπέροχο.', translation:'The color is wonderful.', options:['🎨','🖍️','🖌️'], answer:'🎨' },
+          { sentence:'Η μουσική παίζει γλυκά.', translation:'The music plays sweetly.', options:['🎵','🔊','📻'], answer:'🎵' },
+          { sentence:'Ο φίλος έρχεται σήμερα.', translation:'The friend comes today.', options:['👫','👨','👩'], answer:'👫' },
+          { sentence:'Η ελπίδα μας δίνει δύναμη.', translation:'Hope gives us strength.', options:['🕊️','⚡','💪'], answer:'🕊️' },
+        ]
+      };
+
+      const SENTENCES = {
+        easy: [
+          'Ο σκύλος τρέχει γρήγορα.',
+          'Η Μαρία παίζει μπάλα.',
+          'Έχω ένα όμορφο βιβλίο.',
+          'Η γάτα κοιμάται ήσυχα.',
+          'Το μήλο είναι κόκκινο.',
+          'Το αστέρι λάμπει νυχτερινά.',
+          'Το λουλούδι μυρίζει γλυκά.',
+          'Το παιδί γελάει χαρούμενα.',
+          'Το σπίτι είναι ψηλό.',
+          'Το φεγγάρι φαίνεται όμορφα.',
+          'Το ψωμί είναι νόστιμο.',
+          'Η καρδιά χτυπάει ρυθμικά.',
+          'Το δάσος είναι μυστηριώδες.',
+          'Το πουλί πετάει ελεύθερα.',
+          'Το χρώμα είναι ζωντανό.',
+          'Η μουσική ακούγεται μαγευτικά.',
+          'Ο φίλος μιλάει ευγενικά.',
+          'Η ελπίδα ζει αιώνια.',
+          'Ο ουρανός είναι μπλε.',
+          'Η θάλασσα κυματίζει απαλά.',
+          'Ο ήλιος λάμπει καθαρά.',
+          'Το βουνό είναι ψηλό.',
+          'Ο δρόμος είναι μακρύς.',
+          'Το κλειδί ανοίγει την πόρτα.',
+          'Η πόρτα κλείνει σφιχτά.',
+          'Το παράθυρο είναι ανοιχτό.',
+          'Το τραπέζι είναι στρογγυλό.',
+          'Το κρεβάτι είναι άνετο.',
+          'Ο κήπος ανθίζει υπέροχα.',
+          'Το δέντρο φυτρώνει δυνατά.',
+          'Η γέφυρα συνδέει τις όχθες.',
+          'Το αυτοκίνητο τρέχει γρήγορα.',
+          'Το ποδήλατο κινείται ελαφρά.',
+          'Το λεωφορείο σταματάει εδώ.',
+          'Το αεροπλάνο πετάει ψηλά.',
+          'Το πλοίο ταξιδεύει μακριά.',
+          'Το γάλα είναι λευκό.',
+          'Το κρέας είναι νόστιμο.',
+          'Το ψάρι κολυμπάει καθαρά.',
+          'Το τυρί είναι κίτρινο.',
+          'Το αυγό είναι στρογγυλό.',
+          'Το μέλι είναι γλυκό.',
+          'Το ρίζι είναι λευκό.',
+          'Η ζάχαρη είναι γλυκιά.',
+          'Ο κάφες είναι ζεστός.',
+          'Το τσάι είναι αρωματικό.',
+          'Το κλαδί είναι πράσινο.',
+          'Το φύλλο πέφτει αργά.',
+        ]
+      };
+
+      // Array of positive feedback messages
+      const POSITIVE_FEEDBACK = [
+        'Excellent work!', 'Fantastic job!', 'Superb effort!', 'Outstanding!', 'Magnificent!', 
+        'Brilliant work!', 'Wonderful progress!', 'Amazing achievement!', 'Impressive skill!', 'Perfect execution!'
+      ];
+
+      const SUCCESS_MESSAGES = [
+        'You\'re mastering Greek!', 'Incredible progress!', 'Greek genius in action!', 'Spectacular learning!', 
+        'Phenomenal achievement!', 'Extraordinary effort!', 'Remarkable dedication!', 'Exceptional performance!'
+      ];
+
+      const ENCOURAGEMENT = [
+        'Keep exploring!', 'Try once more!', 'Almost there!', 'You\'re improving!', 'Don\'t give up!', 
+        'Learning takes practice!', 'Every attempt counts!', 'Progress in motion!'
+      ];
+
+      // ---------- State ----------
+      const state = {
+        stars: 0,
+        mem: { lock:false, first:null, moves:0, matched:0, totalPairs:0 },
+        builder: { current:null, tokens:[] },
+        reading: { list:[], idx:0, score:0 },
+        sentences: { list:[], idx:0 },
+        translate: { list:[], idx:0, score:0 },
+        picture: { list:[], idx:0, score:0 },
+        reverse: { list:[], idx:0, score:0 }
+      };
+
+      const els = {
+        starCount: document.getElementById('starCount'),
+        nav: document.getElementById('nav'),
+        routes: {
+          home: document.getElementById('route-home'),
+          alphabet: document.getElementById('route-alphabet'),
+          games: document.getElementById('route-games'),
+          reading: document.getElementById('route-reading'),
+          sentences: document.getElementById('route-sentences'),
+        },
+        lettersGrid: document.getElementById('lettersGrid'),
+        // Games
+        gameSeg: document.getElementById('gameSeg'),
+        newGameBtn: document.getElementById('newGameBtn'),
+        gameMemory: document.getElementById('gameMemory'),
+        gameBuilder: document.getElementById('gameBuilder'),
+        memoryBoard: document.getElementById('memoryBoard'),
+        memMoves: document.getElementById('memMoves'),
+        // Builder
+        builderHint: document.getElementById('builderHint'),
+        builderOutput: document.getElementById('builderOutput'),
+        builderBank: document.getElementById('builderBank'),
+        builderNewBtn: document.getElementById('builderNewBtn'),
+        builderUndo: document.getElementById('builderUndo'),
+        builderShuffle: document.getElementById('builderShuffle'),
+        builderReveal: document.getElementById('builderReveal'),
+        builderStatus: document.getElementById('builderStatus'),
+        // Reading
+        readSentence: document.getElementById('readSentence'),
+        readChoices: document.getElementById('readChoices'),
+        readNext: document.getElementById('readNext'),
+        readShow: document.getElementById('readShow'),
+        readExplain: document.getElementById('readExplain'),
+        readIdx: document.getElementById('readIdx'),
+        readTotal: document.getElementById('readTotal'),
+        readScore: document.getElementById('readScore'),
+        // Sentences
+        sentOutput: document.getElementById('sentOutput'),
+        sentBank: document.getElementById('sentBank'),
+        sentCheck: document.getElementById('sentCheck'),
+        sentUndo: document.getElementById('sentUndo'),
+        sentSkip: document.getElementById('sentSkip'),
+        sentStatus: document.getElementById('sentStatus'),
+        sentIdx: document.getElementById('sentIdx'),
+        sentTotal: document.getElementById('sentTotal'),
+        // New Games
+        gameTranslate: document.getElementById('gameTranslate'),
+        gamePicture: document.getElementById('gamePicture'),
+        gameReverse: document.getElementById('gameReverse'),
+        translateQuestion: document.getElementById('translateQuestion'),
+        translateChoices: document.getElementById('translateChoices'),
+        translateNext: document.getElementById('translateNext'),
+        translateStatus: document.getElementById('translateStatus'),
+        translateScore: document.getElementById('translateScore'),
+        translateTotal: document.getElementById('translateTotal'),
+        pictureQuestion: document.getElementById('pictureQuestion'),
+        pictureChoices: document.getElementById('pictureChoices'),
+        pictureNext: document.getElementById('pictureNext'),
+        pictureStatus: document.getElementById('pictureStatus'),
+        pictureScore: document.getElementById('pictureScore'),
+        pictureTotal: document.getElementById('pictureTotal'),
+        reverseQuestion: document.getElementById('reverseQuestion'),
+        reverseChoices: document.getElementById('reverseChoices'),
+        reverseNext: document.getElementById('reverseNext'),
+        reverseStatus: document.getElementById('reverseStatus'),
+        reverseScore: document.getElementById('reverseScore'),
+        reverseTotal: document.getElementById('reverseTotal'),
+        // Misc
+        toast: document.getElementById('toast'),
+        award: document.getElementById('award'),
+        awardEmoji: document.getElementById('awardEmoji'),
+        awardText: document.getElementById('awardText'),
+        awardClose: document.getElementById('awardClose'),
+        awardBg: document.getElementById('awardBg'),
+      };
+
+      // ---------- Utilities ----------
+      const storageKey = 'greek_fun_kids_v1_easy';
+      function safeLocalStorageSet(key, val){
+        try{ localStorage.setItem(key,val); }catch(e){}
+      }
+      function safeLocalStorageGet(key){
+        try{ return localStorage.getItem(key); }catch(e){ return null; }
+      }
+      function save(){
+        safeLocalStorageSet(storageKey, JSON.stringify({ stars: state.stars }));
+      }
+      function load(){
+        const raw = safeLocalStorageGet(storageKey);
+        if(!raw) return;
+        try{
+          const d = JSON.parse(raw);
+          if(typeof d.stars === 'number') state.stars = d.stars;
+        }catch(e){}
+      }
+      function setStars(n){
+        state.stars = Math.max(0, n|0);
+        els.starCount.textContent = state.stars;
+        save();
+      }
+      function showToast(msg){
+        els.toast.textContent = msg;
+        els.toast.classList.add('show');
+        setTimeout(()=>els.toast.classList.remove('show'), 1200);
+      }
+      function randomFromArray(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      // Award: non-blocking and auto-close.
+      let awardTimer = null;
+      function openAward(){
+        els.award.classList.add('show');
+        els.award.setAttribute('aria-hidden','false');
+        clearTimeout(awardTimer);
+        awardTimer = setTimeout(closeAward, 1500);
+      }
+      function closeAward(){
+        els.award.classList.remove('show');
+        els.award.setAttribute('aria-hidden','true');
+      }
+      els.awardClose.addEventListener('click', closeAward);
+      els.awardBg.addEventListener('click', closeAward);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeAward(); });
+
+      function addStars(n, reason=''){
+        if(n<=0) return;
+        setStars(state.stars + n);
+        els.awardEmoji.textContent = '⭐'.repeat(Math.min(n,4));
+        const message = reason || randomFromArray(SUCCESS_MESSAGES);
+        els.awardText.textContent = `${message}  (+${n}⭐)`;
+        openAward();
+      }
+
+      function shuffle(a){
+        const arr = a.slice();
+        for(let i=arr.length-1;i>0;i--){
+          const j = Math.floor(Math.random()*(i+1));
+          [arr[i],arr[j]]=[arr[j],arr[i]];
+        }
+        return arr;
+      }
+      function pickN(arr, n){ return shuffle(arr).slice(0, n); }
+      function toTokensWithIds(text){
+        return text.split(' ').map((w,i)=>({ id: `${i}-${w}-${Math.random().toString(36).slice(2,7)}`, word: w }));
+      }
+
+      // ---------- Routing ----------
+      function setRoute(route){
+        for(const [k, sec] of Object.entries(els.routes)){
+          sec.classList.toggle('active', k===route);
+        }
+        document.querySelectorAll('nav.tabbar button').forEach(b=>{
+          b.classList.toggle('active', b.dataset.route===route);
+        });
+        if(route==='alphabet'){ renderAlphabet(); }
+        if(route==='games'){ ensureGameVisible(true); }
+        if(route==='reading'){ startReadingRound(); }
+        if(route==='sentences'){ startSentencesRound(); }
+      }
+      els.nav.addEventListener('click', (e)=>{
+        const btn = e.target.closest('button[data-route]');
+        if(!btn) return;
+        setRoute(btn.dataset.route);
+      });
+      document.querySelectorAll('[data-nav]').forEach(el=>{
+        el.addEventListener('click', ()=>{
+          const r = el.dataset.nav;
+          setRoute(r);
+          if(r==='games' && el.dataset.sub){ setGame(el.dataset.sub); }
+        });
+      });
+
+      // ---------- Alphabet ----------
+      function renderAlphabet(){
+        els.lettersGrid.innerHTML = '';
+        LETTERS.forEach((L)=>{
+          const card = document.createElement('div');
+          card.className = 'letter-card';
+          card.innerHTML = `
+            <div class="glyph">
+              <div class="big">${L.upper} <span class="muted">/</span> ${L.lower}</div>
+            </div>
+            <div class="name">${L.name}</div>
+            <div class="hint">Pronunciation: ${L.sound}</div>
+            <div class="example"><span class="emoji">${L.emoji}</span>
+              <div>
+                <div><strong>${L.word}</strong> <span class="muted">(${L.translit})</span></div>
+                <div class="muted">${L.meaning}</div>
+              </div>
+            </div>
+          `;
+          els.lettersGrid.appendChild(card);
+        });
+      }
+
+      // ---------- Games hub ----------
+      function setGame(game){
+        document.querySelectorAll('#gameSeg button').forEach(b=> b.classList.toggle('active', b.dataset.game===game));
+        els.gameMemory.style.display = (game==='memory'?'block':'none');
+        els.gameBuilder.style.display = (game==='builder'?'block':'none');
+        els.gameTranslate.style.display = (game==='translate'?'block':'none');
+        els.gamePicture.style.display = (game==='picture'?'block':'none');
+        els.gameReverse.style.display = (game==='reverse'?'block':'none');
+        
+        if(game==='memory') startMemory();
+        else if(game==='builder') startBuilder();
+        else if(game==='translate') startTranslateGame();
+        else if(game==='picture') startPictureGame();
+        else if(game==='reverse') startReverseGame();
+      }
+      function ensureGameVisible(restart=false){
+        const active = document.querySelector('#gameSeg button.active')?.dataset.game || 'memory';
+        if(restart){
+          if(active==='memory') startMemory();
+          else startBuilder();
+        }
+      }
+      els.gameSeg.addEventListener('click', (e)=>{
+        const b = e.target.closest('button[data-game]');
+        if(!b) return;
+        setGame(b.dataset.game);
+      });
+      els.newGameBtn.addEventListener('click', ()=>{
+        closeAward();
+        ensureGameVisible(true);
+      });
+
+      // Memory game (Easy only: 4 pairs)
+      function startMemory(){
+        closeAward();
+        els.memMoves.textContent = '0';
+        state.mem = { lock:false, first:null, moves:0, matched:0, totalPairs:4 };
+        els.memoryBoard.innerHTML = '';
+        const chosen = pickN(LETTERS, 4).map((L, i)=>({ key:i, up:L.upper, lo:L.lower }));
+        const deck = [];
+        chosen.forEach(ch=>{
+          deck.push({ id:`${ch.key}-U`, key:ch.key, face:ch.up, type:'U' });
+          deck.push({ id:`${ch.key}-L`, key:ch.key, face:ch.lo, type:'L' });
+        });
+        shuffle(deck).forEach(card=>{
+          const el = document.createElement('div');
+          el.className = 'memory-card';
+          el.dataset.id = card.id;
+          el.dataset.key = card.key;
+          el.dataset.type = card.type;
+          el.textContent = '❓';
+          el.addEventListener('click', ()=> flipCard(el, card));
+          els.memoryBoard.appendChild(el);
+        });
+      }
+      function flipCard(el, card){
+        if(state.mem.lock || el.classList.contains('matched') || el.classList.contains('flipped')) return;
+        el.classList.add('flipped');
+        el.textContent = card.face;
+        if(!state.mem.first){
+          state.mem.first = { el, card };
+        } else {
+          state.mem.lock = true;
+          state.mem.moves++;
+          els.memMoves.textContent = String(state.mem.moves);
+          const first = state.mem.first;
+          const match = (first.card.key===card.key) && (first.card.type!==card.type);
+          if(match){
+            setTimeout(()=>{
+              first.el.classList.add('matched'); el.classList.add('matched');
+              state.mem.first = null; state.mem.lock = false; state.mem.matched++;
+              if(state.mem.matched>=state.mem.totalPairs){
+                const m = state.mem.moves, p = state.mem.totalPairs;
+                let stars = 1; if(m <= p*2) stars = 3; else if(m <= p*3) stars = 2;
+                addStars(stars, randomFromArray(POSITIVE_FEEDBACK) + ' Memory mastered!');
+                // immediately prep a new game (no blocking)
+                setTimeout(startMemory, 10);
+              }
+            }, 300);
+          } else {
+            setTimeout(()=>{
+              first.el.classList.remove('flipped'); el.classList.remove('flipped');
+              first.el.textContent = '❓'; el.textContent = '❓';
+              state.mem.first = null; state.mem.lock = false;
+            }, 600);
+          }
+        }
+      }
+
+      // Word Builder
+      function startBuilder(){
+        closeAward();
+        const item = WORDS.easy[Math.floor(Math.random()*WORDS.easy.length)];
+        state.builder.current = item;
+        state.builder.tokens = item.word.split('').map((ch,i)=>({ id:`${i}-${ch}-${Math.random().toString(36).slice(2,6)}`, ch, used:false }));
+        els.builderHint.textContent = `Clue: ${item.emoji} ${item.meaning}  •  Sounds like: ${item.translit}`;
+        els.builderOutput.innerHTML = '';
+        els.builderStatus.textContent = '';
+        renderBuilderBank();
+      }
+      function renderBuilderBank(){
+        const bank = els.builderBank;
+        bank.innerHTML = '';
+        shuffle(state.builder.tokens).forEach(tok=>{
+          const b = document.createElement('button');
+          b.className = 'tile';
+          b.textContent = tok.ch;
+          b.disabled = tok.used;
+          b.addEventListener('click', ()=>{
+            tok.used = true;
+            const span = document.createElement('span');
+            span.className = 'output-char';
+            span.textContent = tok.ch;
+            span.dataset.id = tok.id;
+            els.builderOutput.appendChild(span);
+            renderBuilderBank();
+            checkBuilder();
+          });
+          bank.appendChild(b);
+        });
+      }
+      function builderUndo(){
+        const out = els.builderOutput;
+        if(!out.lastElementChild) return;
+        const last = out.lastElementChild;
+        const id = last.dataset.id;
+        out.removeChild(last);
+        const tok = state.builder.tokens.find(t=>t.id===id);
+        if(tok){ tok.used=false; renderBuilderBank(); }
+        els.builderStatus.textContent = '';
+      }
+      function builderShuffle(){ renderBuilderBank(); }
+      function builderReveal(){
+        els.builderOutput.innerHTML = '';
+        state.builder.tokens.forEach(tok=>{
+          tok.used = true;
+          const span = document.createElement('span');
+          span.className = 'output-char';
+          span.textContent = tok.ch;
+          span.dataset.id = tok.id;
+          els.builderOutput.appendChild(span);
+        });
+        renderBuilderBank();
+        checkBuilder(true);
+      }
+      function checkBuilder(force=false){
+        const made = Array.from(els.builderOutput.children).map(n=>n.textContent).join('');
+        const target = state.builder.current.word;
+        if(made.length === target.length){
+          if(made === target){
+            els.builderStatus.textContent = randomFromArray(POSITIVE_FEEDBACK) + ' 🎉';
+            els.builderStatus.className = 'success';
+            addStars(1, 'Word construction mastered!');
+            setTimeout(startBuilder, 10);
+          } else if(force){
+            els.builderStatus.textContent = `Solution: "${target}"`;
+            els.builderStatus.className = 'fail';
+          } else {
+            els.builderStatus.textContent = randomFromArray(ENCOURAGEMENT);
+            els.builderStatus.className = 'fail';
+          }
+        } else {
+          els.builderStatus.className = '';
+        }
+      }
+      els.builderNewBtn.addEventListener('click', startBuilder);
+      els.builderUndo.addEventListener('click', builderUndo);
+      els.builderShuffle.addEventListener('click', builderShuffle);
+      els.builderReveal.addEventListener('click', builderReveal);
+
+      // ---------- Reading ----------
+      function startReadingRound(){
+        closeAward();
+        const list = shuffle(READING.easy).slice(0,8);
+        state.reading = { list, idx:0, score:0 };
+        els.readTotal.textContent = String(list.length);
+        els.readScore.textContent = '0';
+        els.readExplain.textContent = '';
+        renderReadingQ();
+      }
+      function renderReadingQ(){
+        const { list, idx } = state.reading;
+        const item = list[idx];
+        els.readIdx.textContent = String(idx+1);
+        els.readSentence.textContent = item.sentence;
+        els.readExplain.textContent = '';
+        els.readChoices.innerHTML = '';
+        els.readChoices.dataset.lock='0'; // ensure unlocked for new question
+        shuffle(item.options).forEach(opt=>{
+          const btn = document.createElement('button');
+          btn.className = 'choice';
+          btn.textContent = opt;
+          btn.addEventListener('click', ()=> handleReadingChoice(btn, opt, item));
+          els.readChoices.appendChild(btn);
+        });
+      }
+      function handleReadingChoice(btn, opt, item){
+        if(els.readChoices.dataset.lock==='1') return;
+        els.readChoices.dataset.lock='1';
+        const correct = (opt===item.answer);
+        if(correct){
+          state.reading.score++;
+          els.readScore.textContent = String(state.reading.score);
+          btn.classList.add('correct');
+          showToast(randomFromArray(POSITIVE_FEEDBACK));
+        } else {
+          btn.classList.add('wrong');
+          Array.from(els.readChoices.children).forEach(c=>{
+            if(c.textContent===item.answer) c.classList.add('correct');
+          });
+          showToast(randomFromArray(ENCOURAGEMENT));
+        }
+        els.readExplain.textContent = item.translation;
+      }
+      els.readNext.addEventListener('click', ()=>{
+        const { list } = state.reading;
+        if(state.reading.idx < list.length-1){
+          state.reading.idx++;
+          renderReadingQ();
+        } else {
+          const score = state.reading.score;
+          let stars = 1; if(score>=list.length) stars = 3; else if(score>=list.length-1) stars = 2;
+          addStars(stars, 'Reading comprehension excellence!');
+          // Reset lock and start fresh
+          els.readChoices.dataset.lock='0';
+          setTimeout(startReadingRound, 10);
+        }
+      });
+      els.readShow.addEventListener('click', ()=>{
+        const { list, idx } = state.reading;
+        els.readExplain.textContent = list[idx].translation;
+      });
+
+      // ---------- Sentences ----------
+      function startSentencesRound(){
+        closeAward();
+        const list = shuffle(SENTENCES.easy).slice(0,6);
+        state.sentences = { list, idx:0 };
+        els.sentTotal.textContent = String(list.length);
+        els.sentStatus.textContent = '';
+        renderSentence();
+      }
+      function renderSentence(){
+        const { list, idx } = state.sentences;
+        els.sentIdx.textContent = String(idx+1);
+        els.sentOutput.innerHTML = '';
+        els.sentBank.innerHTML = '';
+        els.sentStatus.textContent = '';
+        const target = list[idx];
+        const tokens = toTokensWithIds(target);
+        shuffle(tokens).forEach(tok=>{
+          const chip = document.createElement('button');
+          chip.className = 'word-chip';
+          chip.textContent = tok.word;
+          chip.addEventListener('click', ()=>{
+            chip.disabled = true; chip.classList.add('disabled');
+            const out = document.createElement('button');
+            out.className = 'word-chip';
+            out.textContent = tok.word;
+            out.dataset.id = tok.id;
+            out.addEventListener('click', ()=>{
+              els.sentOutput.removeChild(out);
+              chip.disabled = false; chip.classList.remove('disabled');
+              els.sentStatus.textContent = '';
+            });
+            els.sentOutput.appendChild(out);
+          });
+          els.sentBank.appendChild(chip);
+        });
+      }
+      function sentUndo(){
+        const out = els.sentOutput;
+        if(!out.lastElementChild) return;
+        const last = out.lastElementChild;
+        const word = last.textContent;
+        out.removeChild(last);
+        const chip = Array.from(els.sentBank.children).find(c=>c.textContent===word && c.disabled);
+        if(chip){ chip.disabled=false; chip.classList.remove('disabled'); }
+        els.sentStatus.textContent = '';
+      }
+      function sentCheck(){
+        const { list, idx } = state.sentences;
+        const target = list[idx];
+        const made = Array.from(els.sentOutput.children).map(n=>n.textContent).join(' ');
+        if(made === target){
+          els.sentStatus.textContent = randomFromArray(POSITIVE_FEEDBACK) + ' 🎉';
+          els.sentStatus.className = 'success';
+          setTimeout(()=>{
+            if(idx < state.sentences.list.length-1){
+              state.sentences.idx++;
+              renderSentence();
+            } else {
+              addStars(2, 'Sentence architecture mastered!');
+              setTimeout(startSentencesRound, 10);
+            }
+          }, 400);
+        } else {
+          els.sentStatus.textContent = randomFromArray(ENCOURAGEMENT);
+          els.sentStatus.className = 'fail';
+        }
+      }
+      els.sentCheck.addEventListener('click', sentCheck);
+      els.sentUndo.addEventListener('click', sentUndo);
+      els.sentSkip.addEventListener('click', ()=>{
+        const { idx } = state.sentences;
+        if(idx < state.sentences.list.length-1){
+          state.sentences.idx++;
+          renderSentence();
+        } else {
+          startSentencesRound();
+        }
+      });
+
+      // ---------- New Games ----------
+      
+      // Translation Game: Greek → English
+      function startTranslateGame(){
+        closeAward();
+        const list = shuffle(WORDS.easy).slice(0,5);
+        state.translate = { list, idx:0, score:0 };
+        els.translateTotal.textContent = String(list.length);
+        els.translateScore.textContent = '0';
+        renderTranslateQ();
+      }
+      function renderTranslateQ(){
+        const { list, idx } = state.translate;
+        const item = list[idx];
+        els.translateQuestion.textContent = item.word;
+        els.translateStatus.textContent = '';
+        els.translateChoices.innerHTML = '';
+        els.translateChoices.dataset.lock='0';
+        
+        // Create wrong options by picking other meanings
+        const wrongOptions = shuffle(WORDS.easy.filter(w => w.meaning !== item.meaning))
+          .slice(0,2).map(w => w.meaning);
+        const allOptions = shuffle([item.meaning, ...wrongOptions]);
+        
+        allOptions.forEach(option=>{
+          const btn = document.createElement('button');
+          btn.className = 'choice';
+          btn.textContent = option;
+          btn.style.fontSize = '16px'; // smaller text for English words
+          btn.addEventListener('click', ()=> handleTranslateChoice(btn, option, item));
+          els.translateChoices.appendChild(btn);
+        });
+      }
+      function handleTranslateChoice(btn, option, item){
+        if(els.translateChoices.dataset.lock==='1') return;
+        els.translateChoices.dataset.lock='1';
+        const correct = (option===item.meaning);
+        if(correct){
+          state.translate.score++;
+          els.translateScore.textContent = String(state.translate.score);
+          btn.classList.add('correct');
+          showToast(randomFromArray(POSITIVE_FEEDBACK));
+          els.translateStatus.textContent = `${item.translit} - ${item.meaning}`;
+        } else {
+          btn.classList.add('wrong');
+          Array.from(els.translateChoices.children).forEach(c=>{
+            if(c.textContent===item.meaning) c.classList.add('correct');
+          });
+          showToast(randomFromArray(ENCOURAGEMENT));
+          els.translateStatus.textContent = `Correct: ${item.translit} - ${item.meaning}`;
+        }
+      }
+      els.translateNext.addEventListener('click', ()=>{
+        const { list } = state.translate;
+        if(state.translate.idx < list.length-1){
+          state.translate.idx++;
+          renderTranslateQ();
+        } else {
+          const score = state.translate.score;
+          let stars = 1; if(score>=list.length) stars = 3; else if(score>=4) stars = 2;
+          addStars(stars, 'Translation mastery achieved!');
+          setTimeout(startTranslateGame, 10);
+        }
+      });
+
+      // Picture Game: Greek Word → Picture/Emoji
+      function startPictureGame(){
+        closeAward();
+        const list = shuffle(WORDS.easy).slice(0,5);
+        state.picture = { list, idx:0, score:0 };
+        els.pictureTotal.textContent = String(list.length);
+        els.pictureScore.textContent = '0';
+        renderPictureQ();
+      }
+      function renderPictureQ(){
+        const { list, idx } = state.picture;
+        const item = list[idx];
+        els.pictureQuestion.textContent = item.word;
+        els.pictureStatus.textContent = '';
+        els.pictureChoices.innerHTML = '';
+        els.pictureChoices.dataset.lock='0';
+        
+        // Create wrong options by picking other emojis
+        const wrongOptions = shuffle(WORDS.easy.filter(w => w.emoji !== item.emoji))
+          .slice(0,2).map(w => w.emoji);
+        const allOptions = shuffle([item.emoji, ...wrongOptions]);
+        
+        allOptions.forEach(option=>{
+          const btn = document.createElement('button');
+          btn.className = 'choice';
+          btn.textContent = option;
+          btn.addEventListener('click', ()=> handlePictureChoice(btn, option, item));
+          els.pictureChoices.appendChild(btn);
+        });
+      }
+      function handlePictureChoice(btn, option, item){
+        if(els.pictureChoices.dataset.lock==='1') return;
+        els.pictureChoices.dataset.lock='1';
+        const correct = (option===item.emoji);
+        if(correct){
+          state.picture.score++;
+          els.pictureScore.textContent = String(state.picture.score);
+          btn.classList.add('correct');
+          showToast(randomFromArray(POSITIVE_FEEDBACK));
+          els.pictureStatus.textContent = `${item.emoji} ${item.translit} - ${item.meaning}`;
+        } else {
+          btn.classList.add('wrong');
+          Array.from(els.pictureChoices.children).forEach(c=>{
+            if(c.textContent===item.emoji) c.classList.add('correct');
+          });
+          showToast(randomFromArray(ENCOURAGEMENT));
+          els.pictureStatus.textContent = `Correct: ${item.emoji} ${item.translit} - ${item.meaning}`;
+        }
+      }
+      els.pictureNext.addEventListener('click', ()=>{
+        const { list } = state.picture;
+        if(state.picture.idx < list.length-1){
+          state.picture.idx++;
+          renderPictureQ();
+        } else {
+          const score = state.picture.score;
+          let stars = 1; if(score>=list.length) stars = 3; else if(score>=4) stars = 2;
+          addStars(stars, 'Picture matching excellence!');
+          setTimeout(startPictureGame, 10);
+        }
+      });
+
+      // Reverse Translation Game: English → Greek
+      function startReverseGame(){
+        closeAward();
+        const list = shuffle(WORDS.easy).slice(0,5);
+        state.reverse = { list, idx:0, score:0 };
+        els.reverseTotal.textContent = String(list.length);
+        els.reverseScore.textContent = '0';
+        renderReverseQ();
+      }
+      function renderReverseQ(){
+        const { list, idx } = state.reverse;
+        const item = list[idx];
+        els.reverseQuestion.textContent = item.meaning;
+        els.reverseStatus.textContent = '';
+        els.reverseChoices.innerHTML = '';
+        els.reverseChoices.dataset.lock='0';
+        
+        // Create wrong options by picking other Greek words
+        const wrongOptions = shuffle(WORDS.easy.filter(w => w.word !== item.word))
+          .slice(0,2).map(w => w.word);
+        const allOptions = shuffle([item.word, ...wrongOptions]);
+        
+        allOptions.forEach(option=>{
+          const btn = document.createElement('button');
+          btn.className = 'choice';
+          btn.textContent = option;
+          btn.addEventListener('click', ()=> handleReverseChoice(btn, option, item));
+          els.reverseChoices.appendChild(btn);
+        });
+      }
+      function handleReverseChoice(btn, option, item){
+        if(els.reverseChoices.dataset.lock==='1') return;
+        els.reverseChoices.dataset.lock='1';
+        const correct = (option===item.word);
+        if(correct){
+          state.reverse.score++;
+          els.reverseScore.textContent = String(state.reverse.score);
+          btn.classList.add('correct');
+          showToast(randomFromArray(POSITIVE_FEEDBACK));
+          els.reverseStatus.textContent = `${item.word} (${item.translit}) - ${item.meaning}`;
+        } else {
+          btn.classList.add('wrong');
+          Array.from(els.reverseChoices.children).forEach(c=>{
+            if(c.textContent===item.word) c.classList.add('correct');
+          });
+          showToast(randomFromArray(ENCOURAGEMENT));
+          els.reverseStatus.textContent = `Correct: ${item.word} (${item.translit})`;
+        }
+      }
+      els.reverseNext.addEventListener('click', ()=>{
+        const { list } = state.reverse;
+        if(state.reverse.idx < list.length-1){
+          state.reverse.idx++;
+          renderReverseQ();
+        } else {
+          const score = state.reverse.score;
+          let stars = 1; if(score>=list.length) stars = 3; else if(score>=4) stars = 2;
+          addStars(stars, 'Reverse translation champion!');
+          setTimeout(startReverseGame, 10);
+        }
+      });
+
+      // ---------- Boot ----------
+      function boot(){
+        load();
+        els.starCount.textContent = String(state.stars);
+        setRoute('home');
+        setGame('memory');
+      }
+      boot();
+    })();
+  </script>
+</body>
+</html>
